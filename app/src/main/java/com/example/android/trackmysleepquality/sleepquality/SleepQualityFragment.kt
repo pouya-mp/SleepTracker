@@ -20,13 +20,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.android.trackmysleepquality.R
 import com.example.android.trackmysleepquality.database.SleepDatabase
 import com.example.android.trackmysleepquality.databinding.FragmentSleepQualityBinding
 
@@ -47,8 +45,8 @@ class SleepQualityFragment : Fragment() {
     val arguments: SleepQualityFragmentArgs by navArgs()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
 
         // Get a reference to the binding object and inflate the fragment views.
@@ -59,7 +57,7 @@ class SleepQualityFragment : Fragment() {
         val dataSource = SleepDatabase.getInstance(application).sleepDatabaseDao
         val viewModelFactory = SleepQualityViewModelFactory(arguments.sleepNightKey, dataSource)
         val viewModel =
-            ViewModelProvider(this, viewModelFactory).get(SleepQualityViewModel::class.java)
+                ViewModelProvider(this, viewModelFactory).get(SleepQualityViewModel::class.java)
 
         binding.lifecycleOwner = viewLifecycleOwner
         binding.sleepQualityViewModel = viewModel
