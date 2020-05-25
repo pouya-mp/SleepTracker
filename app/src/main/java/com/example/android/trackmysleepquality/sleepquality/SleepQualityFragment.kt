@@ -20,11 +20,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.android.trackmysleepquality.R
 import com.example.android.trackmysleepquality.database.SleepDatabase
 import com.example.android.trackmysleepquality.databinding.FragmentSleepQualityBinding
 
@@ -68,6 +71,20 @@ class SleepQualityFragment : Fragment() {
                 viewModel.doneNavigating()
             }
         })
+
+        val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
+            context?.let {
+                val alertDialog = AlertDialog.Builder(it)
+                alertDialog.setTitle(getString(R.string.confirm_going_back_title))
+                alertDialog.setMessage(getString(R.string.confirm_going_back_description))
+                alertDialog.setPositiveButton("yes") { _, _ -> findNavController().popBackStack() }
+                alertDialog.setNeutralButton("cancel") { _, _ -> }
+                alertDialog.show()
+            }
+
+        }
+
+
 
         return binding.root
     }

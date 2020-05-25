@@ -17,11 +17,7 @@
 package com.example.android.trackmysleepquality
 
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavController
-import androidx.navigation.findNavController
-import androidx.navigation.ui.NavigationUI
 
 /**
  * This is the toy app for lesson 6 of the
@@ -47,25 +43,12 @@ import androidx.navigation.ui.NavigationUI
  */
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
-        navController = findNavController(R.id.nav_host_fragment)
-        NavigationUI.setupActionBarWithNavController(this, navController)
 
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        val alertDialog = AlertDialog.Builder(this)
-        alertDialog.setTitle("Are you sure you want to quit ?")
-        alertDialog.setMessage("you are about to save without a sleep quality")
-        alertDialog.setPositiveButton("yes") { _, _ -> navController.popBackStack() }
-        alertDialog.setNeutralButton("cancel") { _, _ -> }
-        alertDialog.show()
-        return super.onSupportNavigateUp()
     }
 
 }

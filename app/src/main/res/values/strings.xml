@@ -52,5 +52,7 @@
 
     <!-- Toast to play after Clear button has been pressed -->
     <string name="cleared_message">All your data is gone forever.</string>
+    <string name="confirm_going_back_title">Are you sure you want to quit ?</string>
+    <string name="confirm_going_back_description">you are about to save without a sleep quality</string>
 
 </resources>
