@@ -30,8 +30,8 @@ import kotlinx.coroutines.*
  * ViewModel for SleepTrackerFragment.
  */
 class SleepTrackerViewModel(
-    val database: SleepDatabaseDao,
-    application: Application
+        val database: SleepDatabaseDao,
+        application: Application
 ) : AndroidViewModel(application) {
 
     private var viewModelJob = Job()
@@ -123,12 +123,16 @@ class SleepTrackerViewModel(
         }
     }
 
+    fun onClearClicked() {
+        _showSnackbarEvent.value = true
+    }
+
     fun onClear() {
         uiScope.launch {
             clear()
             tonight.value = null
 
-            _showSnackbarEvent.value = true
+
         }
     }
 

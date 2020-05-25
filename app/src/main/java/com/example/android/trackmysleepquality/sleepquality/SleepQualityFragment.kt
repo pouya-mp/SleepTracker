@@ -77,7 +77,9 @@ class SleepQualityFragment : Fragment() {
                 val alertDialog = AlertDialog.Builder(it)
                 alertDialog.setTitle(getString(R.string.confirm_going_back_title))
                 alertDialog.setMessage(getString(R.string.confirm_going_back_description))
-                alertDialog.setPositiveButton("yes") { _, _ -> findNavController().popBackStack() }
+                alertDialog.setPositiveButton("yes") { _, _ ->
+                    findNavController().navigate(SleepQualityFragmentDirections.actionSleepQualityFragmentToSleepTrackerFragment())
+                }
                 alertDialog.setNeutralButton("cancel") { _, _ -> }
                 alertDialog.show()
             }

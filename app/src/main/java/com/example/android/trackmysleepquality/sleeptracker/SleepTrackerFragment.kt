@@ -43,13 +43,13 @@ class SleepTrackerFragment : Fragment() {
      * This function uses DataBindingUtil to inflate R.layout.fragment_sleep_quality.
      */
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
 
         // Get a reference to the binding object and inflate the fragment views.
         val binding: FragmentSleepTrackerBinding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_sleep_tracker, container, false
+                inflater, R.layout.fragment_sleep_tracker, container, false
         )
 
         val application = requireNotNull(this.activity).application
@@ -58,7 +58,7 @@ class SleepTrackerFragment : Fragment() {
 
         val viewModelFactory = SleepTrackerViewModelFactory(dataSource, application)
         val sleepTrackerViewModel =
-            ViewModelProvider(this, viewModelFactory).get(SleepTrackerViewModel::class.java)
+                ViewModelProvider(this, viewModelFactory).get(SleepTrackerViewModel::class.java)
 
         binding.sleepTrackerViewModel = sleepTrackerViewModel
         binding.lifecycleOwner = viewLifecycleOwner
@@ -66,9 +66,9 @@ class SleepTrackerFragment : Fragment() {
         sleepTrackerViewModel.navigateToSleepQuality.observe(viewLifecycleOwner, Observer { night ->
             night?.let {
                 findNavController().navigate(
-                    SleepTrackerFragmentDirections.actionSleepTrackerFragmentToSleepQualityFragment(
-                        it.nightId
-                    )
+                        SleepTrackerFragmentDirections.actionSleepTrackerFragmentToSleepQualityFragment(
+                                it.nightId
+                        )
                 )
                 sleepTrackerViewModel.doneNavigating()
             }
@@ -77,10 +77,10 @@ class SleepTrackerFragment : Fragment() {
         sleepTrackerViewModel.showSnackbarEvent.observe(viewLifecycleOwner, Observer {
             if (it == true) {
                 Snackbar.make(
-                    binding.rootLayout,
-                    getString(R.string.cleared_message),
-                    Snackbar.LENGTH_SHORT
-                ).show()
+                        binding.rootLayout,
+                        getString(R.string.cleared_message),
+                        Snackbar.LENGTH_LONG
+                ).setAction(getString(R.string.yes)) { sleepTrackerViewModel.onClear() }.show()
 
                 sleepTrackerViewModel.doneShowingSnackbar()
             }
