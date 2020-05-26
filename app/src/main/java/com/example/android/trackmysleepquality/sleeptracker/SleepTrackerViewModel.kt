@@ -29,8 +29,8 @@ import kotlinx.coroutines.*
  * ViewModel for SleepTrackerFragment.
  */
 class SleepTrackerViewModel(
-    val database: SleepDatabaseDao,
-    application: Application
+        val database: SleepDatabaseDao,
+        application: Application
 ) : AndroidViewModel(application) {
 
     private var viewModelJob = Job()
@@ -127,6 +127,26 @@ class SleepTrackerViewModel(
             clear()
             tonight.value = null
         }
+    }
+
+    private val _currentRecycleLayout = MutableLiveData("linearLayout")
+    val currentRecycleLayout: LiveData<String>
+        get() = _currentRecycleLayout
+
+    fun changeRecycleLayout() {
+        if (_currentRecycleLayout.value.equals("linearLayout")) {
+            changeToGridLayout()
+        } else {
+            changeToLinearLayout()
+        }
+    }
+
+    private fun changeToGridLayout() {
+        _currentRecycleLayout.postValue("gridLayout")
+    }
+
+    private fun changeToLinearLayout() {
+        _currentRecycleLayout.postValue("linearLayout")
     }
 
     override fun onCleared() {

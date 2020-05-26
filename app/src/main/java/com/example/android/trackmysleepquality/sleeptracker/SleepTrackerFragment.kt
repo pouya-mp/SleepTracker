@@ -25,6 +25,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android.trackmysleepquality.R
 import com.example.android.trackmysleepquality.database.SleepDatabase
 import com.example.android.trackmysleepquality.databinding.FragmentSleepTrackerBinding
@@ -101,9 +103,17 @@ class SleepTrackerFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.recyclerView.adapter = adapter
-
         sleepTrackerViewModel.nights.observe(viewLifecycleOwner, Observer {
             adapter.data = it ?: emptyList()
+        })
+        sleepTrackerViewModel.currentRecycleLayout.observe(viewLifecycleOwner, Observer {
+            if (it == "gridLayout") {
+                binding.recyclerView.layoutManager = GridLayoutManager(context, 2)
+                binding.changeLayoutButton.setImageResource(R.drawable.ic_linear_layout)
+            } else {
+                binding.recyclerView.layoutManager = LinearLayoutManager(context)
+                binding.changeLayoutButton.setImageResource(R.drawable.ic_grid_layout)
+            }
         })
     }
 }
