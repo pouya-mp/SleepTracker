@@ -16,12 +16,12 @@
 
 package com.example.android.trackmysleepquality.sleepquality
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -48,8 +48,8 @@ class SleepQualityFragment : Fragment() {
     val arguments: SleepQualityFragmentArgs by navArgs()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
 
         // Get a reference to the binding object and inflate the fragment views.
@@ -60,7 +60,7 @@ class SleepQualityFragment : Fragment() {
         val dataSource = SleepDatabase.getInstance(application).sleepDatabaseDao
         val viewModelFactory = SleepQualityViewModelFactory(arguments.sleepNightKey, dataSource)
         val viewModel =
-            ViewModelProvider(this, viewModelFactory).get(SleepQualityViewModel::class.java)
+                ViewModelProvider(this, viewModelFactory).get(SleepQualityViewModel::class.java)
 
         binding.lifecycleOwner = viewLifecycleOwner
         binding.sleepQualityViewModel = viewModel
@@ -72,20 +72,19 @@ class SleepQualityFragment : Fragment() {
             }
         })
 
-//        val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
-//            context?.let {
-//                val alertDialog = AlertDialog.Builder(it)
-//                alertDialog.setTitle(getString(R.string.confirm_going_back_title))
-//                alertDialog.setMessage(getString(R.string.confirm_going_back_description))
-//                alertDialog.setPositiveButton("yes") { _, _ ->
-//                    findNavController().navigate(SleepQualityFragmentDirections.actionSleepQualityFragmentToSleepTrackerFragment())
-//                }
-//                alertDialog.setNeutralButton("cancel") { _, _ -> }
-//                alertDialog.show()
-//            }
-//
-//        }
+        val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
+            context?.let {
+                val alertDialog = AlertDialog.Builder(it)
+                alertDialog.setTitle(getString(R.string.confirm_going_back_title))
+                alertDialog.setMessage(getString(R.string.confirm_going_back_description))
+                alertDialog.setPositiveButton(getString(R.string.save)) { _, _ ->
+                    findNavController().navigate(SleepQualityFragmentDirections.actionSleepQualityFragmentToSleepTrackerFragment())
+                }
+                alertDialog.setNeutralButton(getString(R.string.cancel)) { _, _ -> }
+                alertDialog.show()
+            }
 
+        }
 
 
         return binding.root
