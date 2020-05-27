@@ -81,15 +81,23 @@ class SleepTrackerFragment : Fragment() {
                 sleepTrackerViewModel.doneNavigating()
             }
         })
+        sleepTrackerViewModel.recyclerViewVisibility.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                binding.recyclerView.visibility = View.VISIBLE
+            } else {
+                binding.recyclerView.visibility = View.GONE
+            }
+        })
 
         sleepTrackerViewModel.showSnackbarEvent.observe(viewLifecycleOwner, Observer {
             if (it == true) {
+
                 Snackbar.make(
                         binding.rootLayout,
                         getString(R.string.cleared_message),
-                        Snackbar.LENGTH_LONG
+                        8000
                 )
-                        .setAction(getString(R.string.clear)) { sleepTrackerViewModel.onClear() }
+                        .setAction(getString(R.string.undo)) { sleepTrackerViewModel.shouldUndo() }
                         .show()
 
                 sleepTrackerViewModel.doneShowingSnackbar()

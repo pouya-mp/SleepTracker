@@ -17,6 +17,8 @@
 package com.example.android.trackmysleepquality.sleeptracker
 
 import android.app.Application
+import android.os.Handler
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -24,6 +26,7 @@ import androidx.lifecycle.Transformations
 import com.example.android.trackmysleepquality.database.SleepDatabaseDao
 import com.example.android.trackmysleepquality.database.SleepNight
 import kotlinx.coroutines.*
+import java.lang.Runnable
 
 /**
  * ViewModel for SleepTrackerFragment.
@@ -57,6 +60,10 @@ class SleepTrackerViewModel(
     val clearButtonVisible = Transformations.map(nights) {
         it?.isNotEmpty()
     }
+
+    private val _recyclerViewVisibility = MutableLiveData(true)
+    val recyclerViewVisibility: LiveData<Boolean>
+        get() = _recyclerViewVisibility
 
     private val _showSnackbarEvent = MutableLiveData(false)
     val showSnackbarEvent: LiveData<Boolean>
@@ -118,15 +125,49 @@ class SleepTrackerViewModel(
         }
     }
 
+    private var shouldClear = true
+    private val _undoTimer = MutableLiveData(8)
+    val undoTimer: LiveData<Int>
+        get() = _undoTimer
+
+    private var runnable: Runnable? = null
     fun onClearClicked() {
+        shouldClear = true
         _showSnackbarEvent.value = true
+        _recyclerViewVisibility.value = false
+        var remainingTime = 9
+        val handler = Handler()
+
+
+        if (runnable == null) {
+            runnable = Runnable {
+                if (remainingTime > 0) {
+                    remainingTime--
+                    Log.i("remainingTime", "$remainingTime")
+                    _undoTimer.postValue(remainingTime)
+                    runnable?.let {
+                        handler.postDelayed(it, 1000)
+                    }
+
+                } else if (remainingTime == 0 && shouldClear) {
+                    onClear()
+
+                }
+            }
+        }
+        runnable?.let {
+            handler.post(it)
+        }
+
+
     }
 
-    fun onClear() {
+    private fun onClear() {
         uiScope.launch {
             clear()
             tonight.value = null
         }
+        doneHidingRecycleView()
     }
 
     private val _currentRecycleLayout = MutableLiveData("linearLayout")
@@ -160,6 +201,16 @@ class SleepTrackerViewModel(
 
     fun doneShowingSnackbar() {
         _showSnackbarEvent.value = false
+    }
+
+    fun shouldUndo() {
+        shouldClear = false
+        doneHidingRecycleView()
+    }
+
+    private fun doneHidingRecycleView() {
+        runnable = null
+        _recyclerViewVisibility.value = true
     }
 }
 
