@@ -101,8 +101,6 @@ class SleepTrackerFragment : Fragment() {
                 snackbar?.show()
 
                 sleepTrackerViewModel.doneShowingSnackbar()
-            } else {
-                snackbar = null
             }
         })
 
@@ -115,6 +113,7 @@ class SleepTrackerFragment : Fragment() {
 
     private fun undo(view: View) {
         sleepTrackerViewModel.shouldUndo()
+        snackbar = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -122,7 +121,7 @@ class SleepTrackerFragment : Fragment() {
 
         binding.recyclerView.adapter = adapter
         sleepTrackerViewModel.nights.observe(viewLifecycleOwner, Observer {
-            adapter.data = it ?: emptyList()
+            adapter.submitList(it ?: emptyList())
         })
         sleepTrackerViewModel.currentRecycleLayout.observe(viewLifecycleOwner, Observer {
             if (it == "gridLayout") {
