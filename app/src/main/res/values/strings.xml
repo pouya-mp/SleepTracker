@@ -62,6 +62,6 @@
     <string name="yes">Yes</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
-    <string name="undo">Undo: %d</string>
+    <string name="undo">Undo(%d)</string>
 
 </resources>

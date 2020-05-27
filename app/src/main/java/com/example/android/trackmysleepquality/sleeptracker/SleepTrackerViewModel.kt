@@ -19,7 +19,10 @@ package com.example.android.trackmysleepquality.sleeptracker
 import android.app.Application
 import android.os.Handler
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import com.example.android.trackmysleepquality.database.SleepDatabaseDao
 import com.example.android.trackmysleepquality.database.SleepNight
 import kotlinx.coroutines.*
@@ -32,6 +35,11 @@ class SleepTrackerViewModel(
         val database: SleepDatabaseDao,
         application: Application
 ) : AndroidViewModel(application) {
+
+    enum class RecycleViewLayout {
+        LINEAR_LAYOUT,
+        GRID_LAYOUT
+    }
 
     private var viewModelJob = Job()
 
@@ -168,12 +176,12 @@ class SleepTrackerViewModel(
         }
     }
 
-    private val _currentRecycleLayout = MutableLiveData("linearLayout")
-    val currentRecycleLayout: LiveData<String>
+    private val _currentRecycleLayout = MutableLiveData(RecycleViewLayout.LINEAR_LAYOUT)
+    val currentRecycleLayout: LiveData<RecycleViewLayout>
         get() = _currentRecycleLayout
 
-    fun changeRecycleLayout() {
-        if (_currentRecycleLayout.value.equals("linearLayout")) {
+    fun toggleRecycleLayout() {
+        if (_currentRecycleLayout.value == RecycleViewLayout.LINEAR_LAYOUT) {
             changeToGridLayout()
         } else {
             changeToLinearLayout()
@@ -181,11 +189,11 @@ class SleepTrackerViewModel(
     }
 
     private fun changeToGridLayout() {
-        _currentRecycleLayout.postValue("gridLayout")
+        _currentRecycleLayout.postValue(RecycleViewLayout.GRID_LAYOUT)
     }
 
     private fun changeToLinearLayout() {
-        _currentRecycleLayout.postValue("linearLayout")
+        _currentRecycleLayout.postValue(RecycleViewLayout.LINEAR_LAYOUT)
     }
 
     override fun onCleared() {

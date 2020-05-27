@@ -124,7 +124,7 @@ class SleepTrackerFragment : Fragment() {
             adapter.submitList(it ?: emptyList())
         })
         sleepTrackerViewModel.currentRecycleLayout.observe(viewLifecycleOwner, Observer {
-            if (it == "gridLayout") {
+            if (it == SleepTrackerViewModel.RecycleViewLayout.GRID_LAYOUT) {
                 binding.recyclerView.layoutManager = GridLayoutManager(context, 2)
                 binding.changeLayoutButton.setImageResource(R.drawable.ic_linear_layout)
             } else {
