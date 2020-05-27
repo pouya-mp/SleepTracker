@@ -43,8 +43,9 @@ class SleepTrackerFragment : Fragment() {
 
     private lateinit var sleepTrackerViewModel: SleepTrackerViewModel
 
-
     private val adapter = SleepNightAdapter()
+
+    private var snackbar: Snackbar? = null
 
     /**
      * Called when the Fragment is ready to display content to the screen.
@@ -91,20 +92,29 @@ class SleepTrackerFragment : Fragment() {
 
         sleepTrackerViewModel.showSnackbarEvent.observe(viewLifecycleOwner, Observer {
             if (it == true) {
-
-                Snackbar.make(
+                snackbar = Snackbar.make(
                         binding.rootLayout,
                         getString(R.string.cleared_message),
                         8000
                 )
-                        .setAction(getString(R.string.undo)) { sleepTrackerViewModel.shouldUndo() }
-                        .show()
+
+                snackbar?.show()
 
                 sleepTrackerViewModel.doneShowingSnackbar()
+            } else {
+                snackbar = null
             }
         })
 
+        sleepTrackerViewModel.undoTimer.observe(viewLifecycleOwner, Observer {
+            snackbar?.setAction(getString(R.string.undo, it), this::undo)
+        })
+
         return binding.root
+    }
+
+    private fun undo(view: View) {
+        sleepTrackerViewModel.shouldUndo()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

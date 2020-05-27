@@ -19,10 +19,7 @@ package com.example.android.trackmysleepquality.sleeptracker
 import android.app.Application
 import android.os.Handler
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.*
 import com.example.android.trackmysleepquality.database.SleepDatabaseDao
 import com.example.android.trackmysleepquality.database.SleepNight
 import kotlinx.coroutines.*
@@ -131,13 +128,13 @@ class SleepTrackerViewModel(
         get() = _undoTimer
 
     private var runnable: Runnable? = null
+
     fun onClearClicked() {
         shouldClear = true
         _showSnackbarEvent.value = true
         _recyclerViewVisibility.value = false
         var remainingTime = 9
         val handler = Handler()
-
 
         if (runnable == null) {
             runnable = Runnable {
@@ -151,7 +148,8 @@ class SleepTrackerViewModel(
 
                 } else if (remainingTime == 0 && shouldClear) {
                     onClear()
-
+                } else {
+                    //This never happens.
                 }
             }
         }
@@ -166,8 +164,8 @@ class SleepTrackerViewModel(
         uiScope.launch {
             clear()
             tonight.value = null
+            doneHidingRecycleView()
         }
-        doneHidingRecycleView()
     }
 
     private val _currentRecycleLayout = MutableLiveData("linearLayout")
