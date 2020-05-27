@@ -21,7 +21,11 @@ import android.content.res.Resources
 import android.os.Build
 import android.text.Html
 import android.text.Spanned
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.LayoutRes
 import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.trackmysleepquality.database.SleepNight
@@ -83,46 +87,7 @@ fun convertNumericQualityToString(quality: Int, resources: Resources): String {
 }
 
 
-/**
- * Take the Long milliseconds returned by the system and stored in Room,
- * and convert it to a nicely formatted string for display.
- *
- * EEEE - Display the long letter version of the weekday
- * MMM - Display the letter abbreviation of the nmotny
- * dd-yyyy - day in month and full year numerically
- * HH:mm - Hours and minutes in 24hr format
- */
-@SuppressLint("SimpleDateFormat")
-fun convertLongToDateString(systemTime: Long): String {
-    return SimpleDateFormat("EEEE MMM-dd-yyyy' Time: 'HH:mm")
-        .format(systemTime).toString()
+fun ViewGroup.inflate(@LayoutRes layout: Int): View {
+    val layoutInflater = LayoutInflater.from(context)
+    return layoutInflater.inflate(layout, this, false)
 }
-
-fun SleepNight.formatted(resources: Resources): Spanned {
-    val sb = StringBuilder()
-    sb.apply {
-        append(resources.getString(R.string.start_time))
-
-        append("\t${convertLongToDateString(startTimeMilli)}<br>")
-        if (endTimeMilli != startTimeMilli) {
-            append(resources.getString(R.string.end_time))
-            append("\t${convertLongToDateString(endTimeMilli)}<br>")
-            append(resources.getString(R.string.quality))
-            append("\t${convertNumericQualityToString(sleepQuality, resources)}<br>")
-            append(resources.getString(R.string.hours_slept))
-            // Hours
-            append("\t ${endTimeMilli.minus(startTimeMilli) / 1000 / 60 / 60}:")
-            // Minutes
-            append("${endTimeMilli.minus(startTimeMilli) / 1000 / 60}:")
-            // Seconds
-        }
-    }
-
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        Html.fromHtml(sb.toString(), Html.FROM_HTML_MODE_LEGACY)
-    } else {
-        HtmlCompat.fromHtml(sb.toString(), HtmlCompat.FROM_HTML_MODE_LEGACY)
-    }
-}
-
-class TextItemViewHolder(val textView: TextView) : RecyclerView.ViewHolder(textView)
