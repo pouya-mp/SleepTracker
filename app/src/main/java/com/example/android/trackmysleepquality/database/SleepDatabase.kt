@@ -37,12 +37,12 @@ abstract class SleepDatabase : RoomDatabase() {
                 var instance = INSTANCE
                 if (instance == null) {
                     instance = Room.databaseBuilder(
-                        context.applicationContext,
-                        SleepDatabase::class.java,
-                        "sleep_history_database"
+                            context.applicationContext,
+                            SleepDatabase::class.java,
+                            "sleep_history_database"
                     )
-                        .fallbackToDestructiveMigration()
-                        .build()
+                            .fallbackToDestructiveMigration()
+                            .build()
                     INSTANCE = instance
                 }
 

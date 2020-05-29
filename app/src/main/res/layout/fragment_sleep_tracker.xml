@@ -93,8 +93,24 @@
                 android:onClick="@{() -> sleepTrackerViewModel.onClearClicked()}"
                 android:text="@string/clear"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/change_layout_button"
+                app:layout_constraintStart_toEndOf="@id/remove_last_night" />
+
+        <Button
+                android:id="@+id/remove_last_night"
+                style="@style/SleepButtons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin"
+                android:layout_marginEnd="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin"
+                android:enabled="@{sleepTrackerViewModel.removeButtonVisible}"
+                android:onClick="@{() -> sleepTrackerViewModel.onClearLastNightClicked()}"
+                android:text="@string/remove_last_night"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/clear_button"
                 app:layout_constraintStart_toStartOf="parent" />
+
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/change_layout_button"

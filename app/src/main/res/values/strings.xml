@@ -63,5 +63,6 @@
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="undo">Undo(%d)</string>
+    <string name="remove_last_night">Remove Last Night</string>
 
 </resources>

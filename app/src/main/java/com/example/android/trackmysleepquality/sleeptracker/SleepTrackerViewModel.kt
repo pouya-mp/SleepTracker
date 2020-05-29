@@ -66,6 +66,10 @@ class SleepTrackerViewModel(
         it?.isNotEmpty()
     }
 
+    val removeButtonVisible = Transformations.map(nights) {
+        it?.isNotEmpty()
+    }
+
     private val _recyclerViewVisibility = MutableLiveData(true)
     val recyclerViewVisibility: LiveData<Boolean>
         get() = _recyclerViewVisibility
@@ -110,6 +114,22 @@ class SleepTrackerViewModel(
         withContext(Dispatchers.IO) {
             database.insert(night)
         }
+    }
+
+    private suspend fun deleteLastNight() {
+        withContext(Dispatchers.IO) {
+            val lastNight = database.getTonight()
+            lastNight?.let {
+                database.clearLastNight(it.nightId)
+            }
+        }
+    }
+
+    fun onClearLastNightClicked() {
+        uiScope.launch {
+            deleteLastNight()
+        }
+
     }
 
     fun onStartTracking() {
