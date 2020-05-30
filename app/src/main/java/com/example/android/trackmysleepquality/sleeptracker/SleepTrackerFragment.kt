@@ -46,7 +46,8 @@ class SleepTrackerFragment : Fragment() {
     private lateinit var sleepTrackerViewModel: SleepTrackerViewModel
 
     private val adapter = SleepNightAdapter(SleepNightAdapter.SleepNightListener { nightId ->
-        Toast.makeText(context, "$nightId", Toast.LENGTH_LONG).show()
+        val action = SleepTrackerFragmentDirections.actionSleepTrackerFragmentToSleepDetailFragment(nightId)
+        findNavController().navigate(action)
     })
 
     private var snackbar: Snackbar? = null
