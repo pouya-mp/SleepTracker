@@ -20,11 +20,8 @@ class SleepNightAdapter(private val listener: SleepNightListener) : ListAdapter<
 
         fun bind(item: SleepNight, listener: SleepNightListener) {
             binding.sleep = item
+            binding.clickListener = listener
             binding.executePendingBindings()
-
-            binding.root.setOnClickListener {
-                listener.onClick(item)
-            }
         }
     }
 
