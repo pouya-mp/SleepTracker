@@ -7,34 +7,28 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.android.trackmysleepquality.R
-import com.example.android.trackmysleepquality.convertDurationToFormatted
-import com.example.android.trackmysleepquality.convertNumericQualityToString
+import com.example.android.trackmysleepquality.*
 import com.example.android.trackmysleepquality.database.SleepNight
-import com.example.android.trackmysleepquality.inflate
+import com.example.android.trackmysleepquality.databinding.ListItemSleepNightBinding
 
 class SleepNightAdapter : ListAdapter<SleepNight, SleepNightAdapter.ViewHolder>(SleepNightDiffCallback()) {
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(private val binding: ListItemSleepNightBinding) : RecyclerView.ViewHolder(binding.root) {
 
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
-                return ViewHolder(parent.inflate(R.layout.list_item_sleep_night))
+                return ViewHolder(parent.inflateFromBinding(R.layout.list_item_sleep_night) as ListItemSleepNightBinding)
             }
         }
-
-        private val sleepLength: TextView = itemView.findViewById(R.id.sleep_length)
-        private val quality: TextView = itemView.findViewById(R.id.quality_string)
-        private val qualityImage: ImageView = itemView.findViewById(R.id.quality_image)
 
         private val res: Resources by lazy {
             itemView.context.resources
         }
 
         fun bind(item: SleepNight) {
-            sleepLength.text = convertDurationToFormatted(item.startTimeMilli, item.endTimeMilli, res)
-            quality.text = convertNumericQualityToString(item.sleepQuality, res)
-            qualityImage.setImageResource(when (item.sleepQuality) {
+            binding.sleepLength.text = convertDurationToFormatted(item.startTimeMilli, item.endTimeMilli, res)
+            binding.qualityString.text = convertNumericQualityToString(item.sleepQuality, res)
+            binding.qualityImage.setImageResource(when (item.sleepQuality) {
                 0 -> R.drawable.ic_sleep_0
                 1 -> R.drawable.ic_sleep_1
                 2 -> R.drawable.ic_sleep_2

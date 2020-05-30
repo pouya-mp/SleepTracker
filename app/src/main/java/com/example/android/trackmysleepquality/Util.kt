@@ -27,6 +27,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.LayoutRes
 import androidx.core.text.HtmlCompat
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.trackmysleepquality.database.SleepNight
 import java.text.SimpleDateFormat
@@ -90,4 +92,9 @@ fun convertNumericQualityToString(quality: Int, resources: Resources): String {
 fun ViewGroup.inflate(@LayoutRes layout: Int): View {
     val layoutInflater = LayoutInflater.from(context)
     return layoutInflater.inflate(layout, this, false)
+}
+
+fun ViewGroup.inflateFromBinding(@LayoutRes layout: Int): ViewDataBinding {
+    val layoutInflater = LayoutInflater.from(context)
+    return DataBindingUtil.inflate(layoutInflater, layout, this, false)
 }
