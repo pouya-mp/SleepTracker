@@ -20,7 +20,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -30,9 +29,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android.trackmysleepquality.R
 import com.example.android.trackmysleepquality.database.SleepDatabase
+import com.example.android.trackmysleepquality.database.SleepNight
 import com.example.android.trackmysleepquality.databinding.FragmentSleepTrackerBinding
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_sleep_tracker.*
 
 /**
  * A fragment with buttons to record start and end times for sleep, which are saved in
@@ -45,7 +44,14 @@ class SleepTrackerFragment : Fragment() {
 
     private lateinit var sleepTrackerViewModel: SleepTrackerViewModel
 
-    private val adapter = SleepNightAdapter()
+    private val adapter = SleepNightAdapter(object : SleepNightAdapter.OnClickListener {
+        override fun onClick(sleepNight: SleepNight) {
+            val action = SleepTrackerFragmentDirections.actionSleepTrackerFragmentToSleepDetailFragment(sleepNight.nightId)
+            findNavController().navigate(action)
+        }
+
+    })
+
 
     private var snackbar: Snackbar? = null
 
@@ -120,13 +126,7 @@ class SleepTrackerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter.setOnClickListener(object : SleepNightAdapter.OnClickListener{
-            override fun onClick(sleepID: Long) {
-                val action = SleepTrackerFragmentDirections.actionSleepTrackerFragmentToSleepDetailFragment(sleepID)
-                findNavController().navigate(action)
-            }
 
-        })
         binding.recyclerView.adapter = adapter
         sleepTrackerViewModel.nights.observe(viewLifecycleOwner, Observer {
             adapter.submitList(it ?: emptyList())

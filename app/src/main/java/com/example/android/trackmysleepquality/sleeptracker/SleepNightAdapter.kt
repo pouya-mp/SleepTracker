@@ -8,9 +8,8 @@ import com.example.android.trackmysleepquality.database.SleepNight
 import com.example.android.trackmysleepquality.databinding.ListItemSleepNightBinding
 import com.example.android.trackmysleepquality.inflateFromBinding
 
-class SleepNightAdapter() : ListAdapter<SleepNight, SleepNightAdapter.ViewHolder>(SleepNightDiffCallback()) {
+class SleepNightAdapter(private var onClickListener: OnClickListener) : ListAdapter<SleepNight, SleepNightAdapter.ViewHolder>(SleepNightDiffCallback()) {
 
-    private var onClickListener: OnClickListener? = null
 
     class ViewHolder(private val binding: ListItemSleepNightBinding) : RecyclerView.ViewHolder(binding.root) {
 
@@ -20,32 +19,25 @@ class SleepNightAdapter() : ListAdapter<SleepNight, SleepNightAdapter.ViewHolder
             }
         }
 
-        fun bind(item: SleepNight) {
+        fun bind(item: SleepNight, listener: OnClickListener) {
             binding.sleep = item
+            binding.clickListener = listener
             binding.executePendingBindings()
         }
     }
 
-    class SleepNightListener(val clickListener: (sleepId: Long) -> Unit) {
-        fun onClick(night: SleepNight) = clickListener(night.nightId)
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
-        holder.itemView.setOnClickListener {
-            onClickListener?.onClick(getItem(position).nightId)
-        }
+        holder.bind(getItem(position), onClickListener)
+
     }
 
-    fun setOnClickListener(onClickListener : OnClickListener){
-        this.onClickListener = onClickListener
-    }
 
     interface OnClickListener {
-        fun onClick(sleepID: Long)
+        fun onClick(sleepNight: SleepNight)
     }
 }
