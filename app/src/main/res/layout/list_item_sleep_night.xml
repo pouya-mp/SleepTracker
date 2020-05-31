@@ -17,8 +17,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackground"
-            android:onClick="@{() -> clickListener.onClick(sleep)}">
+            android:background="?attr/selectableItemBackground">
 
         <ImageView
                 android:id="@+id/quality_image"

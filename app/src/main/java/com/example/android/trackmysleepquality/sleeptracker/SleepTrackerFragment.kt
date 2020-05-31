@@ -45,10 +45,7 @@ class SleepTrackerFragment : Fragment() {
 
     private lateinit var sleepTrackerViewModel: SleepTrackerViewModel
 
-    private val adapter = SleepNightAdapter(SleepNightAdapter.SleepNightListener { nightId ->
-        val action = SleepTrackerFragmentDirections.actionSleepTrackerFragmentToSleepDetailFragment(nightId)
-        findNavController().navigate(action)
-    })
+    private val adapter = SleepNightAdapter()
 
     private var snackbar: Snackbar? = null
 
@@ -123,7 +120,13 @@ class SleepTrackerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        adapter.setOnClickListener(object : SleepNightAdapter.OnClickListener{
+            override fun onClick(sleepID: Long) {
+                val action = SleepTrackerFragmentDirections.actionSleepTrackerFragmentToSleepDetailFragment(sleepID)
+                findNavController().navigate(action)
+            }
 
+        })
         binding.recyclerView.adapter = adapter
         sleepTrackerViewModel.nights.observe(viewLifecycleOwner, Observer {
             adapter.submitList(it ?: emptyList())
