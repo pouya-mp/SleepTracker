@@ -141,7 +141,11 @@ class SleepTrackerFragment : Fragment() {
         })
         sleepTrackerViewModel.currentRecycleLayout.observe(viewLifecycleOwner, Observer {
             if (it == SleepTrackerViewModel.RecycleViewLayout.GRID_LAYOUT) {
-                binding.recyclerView.layoutManager = GridLayoutManager(context, 2)
+                binding.recyclerView.layoutManager = GridLayoutManager(context, 2).apply {
+                    spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                        override fun getSpanSize(position: Int) = adapter.spanSizeForPosition(position)
+                    }
+                }
                 binding.changeLayoutButton.setImageResource(R.drawable.ic_linear_layout)
             } else {
                 binding.recyclerView.layoutManager = LinearLayoutManager(context)

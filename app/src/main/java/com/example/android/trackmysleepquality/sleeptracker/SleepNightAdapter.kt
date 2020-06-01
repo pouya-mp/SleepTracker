@@ -101,4 +101,12 @@ class SleepNightAdapter(private var onClickListener: OnClickListener) : ListAdap
         }
     }
 
+    fun spanSizeForPosition(position: Int): Int {
+        return when (getItemViewType(position)) {
+            ITEM_VIEW_TYPE_HEADER -> 2
+            ITEM_VIEW_TYPE_ITEM -> 1
+            else -> 1
+        }
+    }
+
 }
