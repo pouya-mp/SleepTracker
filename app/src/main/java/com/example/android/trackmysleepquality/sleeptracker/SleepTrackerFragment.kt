@@ -45,11 +45,7 @@ class SleepTrackerFragment : Fragment() {
     private lateinit var sleepTrackerViewModel: SleepTrackerViewModel
 
     private val adapter = SleepNightAdapter(object : SleepNightAdapter.OnClickListener {
-        override fun onClick(sleepNight: SleepNight) {
-            val action = SleepTrackerFragmentDirections.actionSleepTrackerFragmentToSleepDetailFragment(sleepNight.nightId)
-            findNavController().navigate(action)
-        }
-
+        override fun onClick(sleepNight: SleepNight) = sleepTrackerViewModel.onItemClick(sleepNight)
     })
 
 
@@ -87,9 +83,21 @@ class SleepTrackerFragment : Fragment() {
                                 it.nightId
                         )
                 )
-                sleepTrackerViewModel.doneNavigating()
+                sleepTrackerViewModel.doneNavigatingToSleepQuality()
             }
         })
+
+        sleepTrackerViewModel.navigateToSleepDetail.observe(viewLifecycleOwner, Observer { night ->
+            night?.let {
+                findNavController().navigate(
+                        SleepTrackerFragmentDirections.actionSleepTrackerFragmentToSleepDetailFragment(
+                                it.nightId
+                        )
+                )
+                sleepTrackerViewModel.doneNavigatingToSleepDetail()
+            }
+        })
+
         sleepTrackerViewModel.recyclerViewVisibility.observe(viewLifecycleOwner, Observer {
             if (it == true) {
                 binding.recyclerView.visibility = View.VISIBLE
