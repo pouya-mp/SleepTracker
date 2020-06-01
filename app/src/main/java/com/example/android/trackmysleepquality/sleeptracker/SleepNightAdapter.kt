@@ -1,6 +1,5 @@
 package com.example.android.trackmysleepquality.sleeptracker
 
-import android.provider.ContactsContract
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
@@ -10,7 +9,10 @@ import com.example.android.trackmysleepquality.R
 import com.example.android.trackmysleepquality.database.SleepNight
 import com.example.android.trackmysleepquality.databinding.ListItemSleepNightBinding
 import com.example.android.trackmysleepquality.inflateFromBinding
-import java.lang.ClassCastException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SleepNightAdapter(private var onClickListener: OnClickListener) : ListAdapter<SleepNightAdapter.DataItem, RecyclerView.ViewHolder>(SleepNightDiffCallback()) {
 
@@ -60,6 +62,8 @@ class SleepNightAdapter(private var onClickListener: OnClickListener) : ListAdap
         abstract val id: Long
     }
 
+    private val adapterScope = CoroutineScope(Dispatchers.Default)
+
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
             is DataItem.Header -> ITEM_VIEW_TYPE_HEADER
@@ -85,11 +89,16 @@ class SleepNightAdapter(private var onClickListener: OnClickListener) : ListAdap
     }
 
     fun addHeaderAndSubmitList(list: List<SleepNight>?) {
-        val items = when (list) {
-            null -> listOf(DataItem.Header)
-            else -> listOf(DataItem.Header) + list.map { DataItem.SleepNightItem(it) }
+        adapterScope.launch {
+            val items = when (list) {
+                null -> listOf(DataItem.Header)
+                else -> listOf(DataItem.Header) + list.map { DataItem.SleepNightItem(it) }
+            }
+
+            withContext(Dispatchers.Main) {
+                submitList(items)
+            }
         }
-        submitList(items)
     }
 
 }
