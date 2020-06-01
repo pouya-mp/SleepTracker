@@ -137,7 +137,7 @@ class SleepTrackerFragment : Fragment() {
 
         binding.recyclerView.adapter = adapter
         sleepTrackerViewModel.nights.observe(viewLifecycleOwner, Observer {
-            adapter.submitList(it ?: emptyList())
+            adapter.addHeaderAndSubmitList(it)
         })
         sleepTrackerViewModel.currentRecycleLayout.observe(viewLifecycleOwner, Observer {
             if (it == SleepTrackerViewModel.RecycleViewLayout.GRID_LAYOUT) {
